@@ -3,7 +3,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <html>
 <head>
-	<title>Home</title>
+	<title>Add New Candidate</title>
 </head>
 <body>
 <form:form method="POST" commandName="candidate" style="padding:8px">
