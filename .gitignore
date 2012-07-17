@@ -1,6 +1,10 @@
-*.class
-
-# Package Files #
-*.jar
-*.war
-*.ear
+# Common IDEs
+*.iml
+.idea
+.idea/**/*
+build/
+data/
+lib/
+target/
+.project
+.settings
