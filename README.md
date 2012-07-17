@@ -1,4 +1,4 @@
 CVBANK
 ======
 
-Java web application to store candidate resumes. It used JEST api and Elasticsearch
+Java web application to store candidates resumes. It used JEST api and Elasticsearch
