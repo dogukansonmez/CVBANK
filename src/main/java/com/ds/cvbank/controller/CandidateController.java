@@ -36,10 +36,19 @@ public class CandidateController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public ModelAndView depositCandidate(@RequestParam(value = "candidate", required = false) Candidate candidate) {
+    public ModelAndView editCandidate(@RequestParam(value = "email", required = false) String email) {
+        Candidate candidate = null;
+        if (email != null && !email.equalsIgnoreCase("")) {
+            logger.info("Getting candidate with email:" + email);
+            candidate = recruiter.getCandidate(email);
+        }
+        if (candidate == null) {
+            candidate = new Candidate();
+        }
+        logger.info("Candidate Email" + candidate.getEmail());
         ModelAndView mv = new ModelAndView();
         mv.setViewName("deposit");
-        mv.addObject(new Candidate());
+        mv.addObject(candidate);
         return mv;
     }
 

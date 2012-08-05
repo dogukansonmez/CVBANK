@@ -7,9 +7,10 @@
 <body>
 <h1>Listing Products</h1>
 <c:forEach items="${candidates}" var="candidate">
-<a href="edit?id=${candidate.id}">Name : ${candidate.firstName} ${candidate.firstName}, Phone:${candidate.phoneNumber}, Email: Phone:${candidate.email}   </a>
+<a href="deposit?email=${candidate.email}">Name : ${candidate.firstName} ${candidate.firstName}, Phone:${candidate.phoneNumber}, Email: Phone:${candidate.email}</a>
 <br />
 </c:forEach>
 <a href="deposit"> Deposit CV</a>
+<a href="/"> Home</a>
 </body>
 </html>

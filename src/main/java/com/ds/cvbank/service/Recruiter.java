@@ -4,6 +4,7 @@ import com.ds.cvbank.model.Candidate;
 import com.ds.cvbank.model.SearchBox;
 import io.searchbox.client.ElasticSearchClient;
 import io.searchbox.client.ElasticSearchResult;
+import io.searchbox.core.Get;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import org.apache.log4j.Logger;
@@ -30,12 +31,15 @@ public class Recruiter {
     ElasticSearchClient elasticSearchClient;
 
     public boolean addNewCandidate(Candidate candidate){
-        ElasticSearchResult result;
+        ElasticSearchResult result = null;
         try {
-            result = elasticSearchClient.execute(new Index("cvbank", "candidate", candidate));
+            result = elasticSearchClient.execute(new Index(candidate,candidate.getEmail()));
         } catch (IOException e) {
-            logger.error("Exception occurred while adding new candidate. Exception: ",e);
+            logger.error("Exception occurred while adding new candidate. Exception: " ,e);
             return false;
+        }
+        if(!result.isSucceeded()){
+            logger.error("Cannot add new candidate Exception:" + result.getErrorMessage());
         }
         return result.isSucceeded();
     }
@@ -46,7 +50,10 @@ public class Recruiter {
         logger.info("Query" + query.toString());
         ElasticSearchResult searchResult = null;
         try {
-            searchResult = elasticSearchClient.execute(new Search(query));
+            Search search =   new Search(query);
+            search.addIndex("cvbank");
+            search.addType("candidate");
+            searchResult = elasticSearchClient.execute(search);
         } catch (IOException e) {
           logger.error("Search error:",e);
            return new ArrayList<Candidate>();
@@ -82,5 +89,18 @@ public class Recruiter {
             }
         }
         return query;
+    }
+
+    public Candidate getCandidate(String email) {
+        ElasticSearchResult searchResult;
+        try {
+            searchResult = elasticSearchClient.execute(new Get(new String[]{email}));
+        } catch (IOException e) {
+            logger.error("Search error:",e);
+            return new Candidate();
+        }
+
+        logger.info("Get result : " + searchResult.isSucceeded());
+        return searchResult.getSourceAsObject(Candidate.class);
     }
 }
