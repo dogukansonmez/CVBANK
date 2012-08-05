@@ -5,7 +5,6 @@ package com.ds.cvbank.controller;
  */
 
 
-import com.ds.cvbank.model.Candidate;
 import com.ds.cvbank.model.SearchBox;
 import com.ds.cvbank.service.Recruiter;
 import org.apache.log4j.Logger;
@@ -46,10 +45,13 @@ public class SearchPageController {
 
 
     @RequestMapping(method = RequestMethod.POST)
-    public String searchCandidate(@ModelAttribute("searchBox") SearchBox searchBox ) {
-        logger.info("received search " + searchBox);
-        List<Candidate> candidates = recruiter.searchForCandidates(searchBox);
-        return "redirect:/";
+    public ModelAndView searchCandidate(@ModelAttribute("searchBox") SearchBox searchBox ) {
+        List candidateList = recruiter.searchForCandidates(searchBox);
+        ModelAndView mv = new ModelAndView();
+        mv.addObject("candidates", candidateList);
+        mv.setViewName("list");
+        logger.info("requesting /list");
+        return mv;
     }
 
 }

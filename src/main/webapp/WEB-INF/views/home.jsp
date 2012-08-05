@@ -27,7 +27,7 @@
     <p>
         Number Of Result: <form:input path="numberOfResult"/>
     </p>
-      <input type="submit" value="Save"/>
+      <input type="submit" value="search"/>
 </form:form>
 <HR>
 <a href="deposit">Add New Candidate</a>

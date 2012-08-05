@@ -43,5 +43,4 @@ public class CandidateController {
         return mv;
     }
 
-
 }

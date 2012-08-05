@@ -43,6 +43,7 @@ public class Recruiter {
 
     public List<Candidate> searchForCandidates(SearchBox searchBox) {
        BoolQueryBuilder query = buildQBoolQuery(searchBox);
+        logger.info("Query" + query.toString());
         ElasticSearchResult searchResult = null;
         try {
             searchResult = elasticSearchClient.execute(new Search(query));
@@ -52,7 +53,7 @@ public class Recruiter {
         }
 
         logger.info("Search result : " + searchResult.isSucceeded());
-        return (List<Candidate>) searchResult.getSourceAsObjectList(Candidate.class);
+        return searchResult.getSourceAsObjectList(Candidate.class);
     }
 
     private BoolQueryBuilder buildQBoolQuery(SearchBox searchBox) {
@@ -61,15 +62,24 @@ public class Recruiter {
         String[] mustNot = searchBox.getNoneOfTheseWords().split(",");
         BoolQueryBuilder query = new BoolQueryBuilder();
         for(String term:mustHave){
-            query.must(termQuery("content", term));
+            if(term.trim().length()> 0){
+                logger.info("term : " + term);
+                query.must(termQuery("content", term));
+            }
         }
 
         for(String term:shouldHave){
-            query.should(termQuery("content", term));
+            if(term.trim().length()> 0){
+                logger.info("term : " + term);
+                query.should(termQuery("content", term));
+            }
         }
 
         for(String term:mustNot){
-            query.mustNot(termQuery("content", term));
+            if(term.trim().length()> 0){
+                logger.info("term : " + term);
+                query.mustNot(termQuery("content", term));
+            }
         }
         return query;
     }
